@@ -9,8 +9,8 @@ class Food():
         self.color = (255,0,0) # Red
 
         # Position
-        self.x = randint(1, grid_size - 1) * grid_size
-        self.y = randint(1, grid_size - 1) * grid_size
+        self.x = randint(1, grid_size - 2) * grid_size
+        self.y = randint(1, grid_size - 2) * grid_size
         self.width = grid_size
         self.height = grid_size
 
@@ -23,5 +23,5 @@ class Food():
         pygame.draw.rect(screen, self.color, apple)
 
     def eaten(self) -> None:
-        self.x = randint(1, self.grid_size - 1) * self.grid_size
-        self.y = randint(1, self.grid_size - 1) * self.grid_size
+        self.x = randint(1, self.grid_size - 2) * self.grid_size
+        self.y = randint(1, self.grid_size - 2) * self.grid_size
