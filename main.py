@@ -1,8 +1,8 @@
 from apple import Food
 from snake import Snake
+from agent import Agent
 import pygame
 import sys
-
 
 def eat(snake : Snake,  food : Food) -> bool:
     if (snake.x, snake.y) == (food.x, food.y):
@@ -45,7 +45,14 @@ def main():
     
     # Score
     score = 0
+    record = 0
     font = pygame.font.SysFont(None, 24)
+
+    # Reward
+    reward = 0
+
+    # Agent
+    agent = Agent()
 
     # Game Loop
     while True:
@@ -69,32 +76,63 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
+    
+        # Play step
 
-                # Snake Movement
-                if event.key == pygame.K_DOWN:
-                    snake.turn('down')
-                if event.key == pygame.K_UP:
-                    snake.turn('up')
-                if event.key == pygame.K_LEFT:
-                    snake.turn('left')
-                if event.key == pygame.K_RIGHT:
-                    snake.turn('right')
+        # State of the game
+        current_state = agent.get_state(snake, food)
+
+        # Snake Movement
+        action = agent.get_action(current_state)
+
+        # print(action)
+
+        snake.turn(action)
 
         drawGrid()
 
         snake.draw(screen)
         food.draw(screen)
 
-        snake.move(width, height)
+        done = snake.move(width, height)
 
         if eat(snake, food):
             score += 1
-        elif snake.length == 0:
-            score = 0
+            reward += 20 # If our AI eats a piece of fruit then we give it a reward of +10
+        else:
+            reward -= 0.1
 
         screen.blit(score_text, (20,20))
         pygame.display.flip()
         clock.tick(10)
+
+        new_state = agent.get_state(snake, food)
+
+        # Train short memory
+        agent.train_short_memory(current_state, action, reward, new_state, done)
+
+        # Remember
+        agent.remember(current_state, action, reward, new_state, done)
+        
+        if done:
+            # Train long memory
+            # This is very important to our agent because it allows it to train on all of the past games and gain 'experience'
+
+            # Reset Game
+            agent.num_games += 1
+            agent.train_long_memory()
+
+            if score > record:
+                record = score
+
+                agent.model.saveModel()
+
+            print(f'Game: {agent.num_games} Score: {score} Record: {record}')
+
+            score = 0
+            reward -= 10
+
+
 
 if __name__ == "__main__":
     main()

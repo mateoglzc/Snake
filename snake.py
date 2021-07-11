@@ -15,6 +15,7 @@ class Snake():
         self.y_speed = 0
         self.length = 0
         self.positions = []
+        self.direction = 'right'
 
         # Misc
         self.grid_size = grid_size
@@ -27,7 +28,9 @@ class Snake():
             square = pygame.Rect(i[0],i[1],self.width, self.height)
             pygame.draw.rect(screen, self.color, square)
 
-    def move(self, screen_width, screen_height) -> None:
+    def move(self, screen_width, screen_height) -> bool:
+
+        done = False
 
         if self.length + 1 == len(self.positions):
             for i in range(self.length):
@@ -40,20 +43,41 @@ class Snake():
 
 
         if self.x == screen_width or self.x == -self.grid_size:
+            done = True
             self.reset();
         elif self.y == screen_height or self.y == -self.grid_size:
+            done = True
             self.reset()
 
         if self.length > 3 and self.positions[-1] in self.positions[:-1]:
+            done = True
             self.reset()
         
         self.x += self.x_speed * 20
         self.y += self.y_speed * 20
 
-    def turn(self, direction : str) -> None:
+        return done
+
+    def turn(self, action : list) -> None:
+
+        # Clock wise directions
+        d = ['up', 'right', 'down', 'left']
+        idx = d.index(self.direction)
+
+        if max(action) == action[1]:
+            idx += 1
+            if idx == len(d):
+                idx = 0
+            self.direction = d[idx]
+        elif max(action) == action[2]:
+            idx -= 1
+            if idx < 0:
+                idx = len(d) - 1
+            self.direction = d[idx]
+
         directions = {'left' : (-1, 0), 'right' : (1, 0), 'up' : (0, -1), 'down' : (0,1)}
-        self.x_speed = directions[direction][0]
-        self.y_speed = directions[direction][1]
+        self.x_speed = directions[self.direction][0]
+        self.y_speed = directions[self.direction][1]
 
     def reset(self):
         self.positions = []
