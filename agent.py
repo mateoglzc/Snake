@@ -23,7 +23,7 @@ class Agent():
         self.memory = deque(maxlen=MAX_MEMORY)
 
         # - Model
-        self.model = SnakeLinearQ(8, 256, 3)
+        self.model = SnakeLinearQ(11, 6, 3)
         # - Training algorithm
         self.trainer = SnakeTrainer(self.model, self.gamma, self.epsilon, LEARN_RATE)
 
@@ -84,7 +84,7 @@ class Agent():
         state = [
 
             # Danger
-            # danger_straight, danger_right, danger_left,
+            danger_straight, danger_right, danger_left,
             
             # Direction
             directions[snake_dir] == 'left',

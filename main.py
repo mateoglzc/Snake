@@ -54,6 +54,8 @@ def main():
     # Agent
     agent = Agent()
 
+    itr = 0
+
     # Game Loop
     while True:
 
@@ -85,8 +87,6 @@ def main():
         # Snake Movement
         action = agent.get_action(current_state)
 
-        # print(action)
-
         snake.turn(action)
 
         drawGrid()
@@ -99,12 +99,10 @@ def main():
         if eat(snake, food):
             score += 1
             reward += 20 # If our AI eats a piece of fruit then we give it a reward of +10
-        else:
-            reward -= 0.1
 
         screen.blit(score_text, (20,20))
         pygame.display.flip()
-        clock.tick(10)
+        clock.tick(40)
 
         new_state = agent.get_state(snake, food)
 
@@ -113,24 +111,33 @@ def main():
 
         # Remember
         agent.remember(current_state, action, reward, new_state, done)
+
+        if itr > 500:
+            done = True
+
+        itr += 1
         
         if done:
             # Train long memory
             # This is very important to our agent because it allows it to train on all of the past games and gain 'experience'
 
+            reward -= 10
+
             # Reset Game
             agent.num_games += 1
             agent.train_long_memory()
+            snake.reset()
 
             if score > record:
                 record = score
 
                 agent.model.saveModel()
 
-            print(f'Game: {agent.num_games} Score: {score} Record: {record}')
+            print(f'Game: {agent.num_games} Score: {score} Record: {record}, Reward: {reward}')
 
             score = 0
-            reward -= 10
+            reward = 0
+            itr = 0
 
 
 

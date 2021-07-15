@@ -27,7 +27,7 @@ class Snake():
             square = pygame.Rect(i[0],i[1],self.width, self.height)
             pygame.draw.rect(screen, self.color, square)
 
-    def move(self, screen_width, screen_height) -> None:
+    def move(self, screen_width, screen_height) -> bool:
 
         if self.length + 1 == len(self.positions):
             for i in range(self.length):
@@ -40,15 +40,20 @@ class Snake():
 
 
         if self.x == screen_width or self.x == -self.grid_size:
-            self.reset();
+            self.reset()
+            return True
         elif self.y == screen_height or self.y == -self.grid_size:
             self.reset()
+            return True
 
         if self.length > 3 and self.positions[-1] in self.positions[:-1]:
             self.reset()
+            return True
         
         self.x += self.x_speed * 20
         self.y += self.y_speed * 20
+
+        return False
 
     def turn(self, direction : str) -> None:
         directions = {'left' : (-1, 0), 'right' : (1, 0), 'up' : (0, -1), 'down' : (0,1)}

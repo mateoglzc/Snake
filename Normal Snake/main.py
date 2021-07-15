@@ -1,8 +1,22 @@
 from apple import Food
 from snake import Snake
 from button import Button
+from inputBox import InputBox
 import pygame
+import pandas as pd
 import sys
+
+def saveRecord(name : str, score : int):
+    records = pd.read_csv("./records.csv")
+    new_score = [name,score]
+    records.loc[len(records)] = new_score
+    records.to_csv("./records.csv", index=False)
+
+def getRecords():
+    records = pd.read_csv("./records.csv")
+    records = records.sort_values(by=["Score"], ascending=False)
+    return records.to_dict(orient="list")
+
 
 def drawGrid(screen, grid_w, grid_h, grid_size):
     for y in range(int(grid_h)):
@@ -61,12 +75,13 @@ def snakeGame(screen, width, height, grid_h, grid_w, grid_size, font, score, sna
     snake.draw(screen)
     food.draw(screen)
 
-    snake.move(width, height)
+    done = snake.move(width, height)
 
     if eat(snake, food):
         score += 1
-    elif snake.length == 0:
-        score = 0
+    
+    if done:
+        scene = "RegRecord"
 
     return scene, score
 
@@ -90,9 +105,43 @@ def startMenu(screen, start_button, exit_button) -> str:
         sys.exit()
         
     screen.blit(title, (25, 50))
-    
 
     return scene
+
+def registerRecord(screen, input_box, events, title, font, sc) -> str:
+        scene = "RegRecord"
+
+        input_box.draw(screen)        
+        ready, record_name = input_box.write(events)
+
+        # Render records
+        records = getRecords()
+        names = records["Name"]
+        scores = records["Score"]
+
+        screen.blit(title, (50,50))
+
+        x = 105
+        y = 145
+
+        for i in range(15):
+
+            if i < len(names):
+                name = font.render(f'{names[i]}', True, (255,255,255))
+                score = font.render(f'{scores[i]}', True, (255,255,255))
+
+                screen.blit(name, (x, y))
+                screen.blit(score, (x+160, y))
+
+                y += 20
+
+        if ready:
+            saveRecord(record_name, sc)
+            scene = "Start"
+            input_box.text = ''
+            sc = 0
+
+        return scene, sc
 
 def main():
 
@@ -110,7 +159,8 @@ def main():
     start_button = Button(80, 220, "./Images/start.png")
     exit_button = Button(220, 220, "./Images/exit.png")
     
-
+    # Input text box
+    record_input = InputBox(105, 110, 100, 50, (255, 134, 192))
     
     # Grid
     grid_size = 20
@@ -126,18 +176,22 @@ def main():
 
     scene = "Start"
 
+    # Record Title
+    record_title = pygame.image.load("./Images/NewRecord.png")
+
     # Game Loop
     while True:
 
         # Draw Grid
         drawGrid(screen, grid_w, grid_h, grid_size)
 
+        events = pygame.event.get()
 
         # Check which keys are pressed
         keys = pygame.key.get_pressed()
 
         # Check for events 
-        for event in pygame.event.get():
+        for event in events:
 
             if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
 
@@ -162,6 +216,18 @@ def main():
 
             score_text = font.render(f'Score: {score}', True, (255,255,255))
             screen.blit(score_text, (20,4))
+        
+        elif scene == "RegRecord":
+            scene, score = registerRecord(
+                screen, 
+                record_input, 
+                events,
+                record_title,
+                font,
+                score
+                )
+    
+
 
         pygame.display.flip()
         clock.tick(10)
