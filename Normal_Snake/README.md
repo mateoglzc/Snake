@@ -2,7 +2,9 @@
 
 ## How to play
 
-When you first launch the game you will be greeted with this screen. ![Snake Menu](Images/Menu.JPG)
+When you first launch the game you will be greeted with this screen. 
+
+![Snake Menu](Images/Menu.JPG)
 
 Here you can choose to play by pressing "Start" or exit the game by pressing "Exit". *Note: you can also exit the game at any time by pressing the **ESC** key.*
 
