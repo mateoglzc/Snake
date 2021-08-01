@@ -4,11 +4,7 @@ We are all familiar with the classic game "Snake", in which you control a little
 
 This is a version of the game 'Snake' made in python using the Pygame library. With this I'm also working on a deep learning AI model that will hopefully learn to play the game.
 
-## Normal Snake
-
-Let's get started with the normal Snake game. 😁
-
-### **Installing it**
+## installation
 
 To play the game we first need to download it.
 
@@ -16,7 +12,13 @@ If you would only like to play the game and are not interested in the AI model, 
 
 On the other hand if you are only interested in the AI model, just download the folder [Snake AI](./Snake_AI). 
 
-If you would like to have both feel free to download the whole repository. 
+If you would like to have both feel free to download the whole repository.
+
+It's important to point out that both the game and the AI require some dependencies to run. This are listed in the requirements text file inside each project. You can install this dependencies using this command.
+
+```powershell
+pip install -r requirements.txt
+```
 
 To run it you'll need to have python installed. You can install it in the [official python website](https://www.python.org/).
 
