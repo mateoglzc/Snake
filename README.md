@@ -34,3 +34,8 @@ As well, to run **only** the AI game you must be inside the **Snake_AI** folder 
 python playAI.py
 ```
 
+## How to play
+
+[How to play Instructions for Normal Snake](./Normal_Snake/README.md)
+
+[How to play Instructions for Snake AI](./Snake_AI/README.md)
