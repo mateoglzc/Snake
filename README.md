@@ -14,14 +14,14 @@ On the other hand if you are only interested in the AI model, just download the 
 
 If you would like to have both feel free to download the whole repository.
 
+
+To run it you'll need to have python installed. You can install it in the [official python website](https://www.python.org/).
+
 It's important to point out that both the game and the AI require some dependencies to run. This are listed in the requirements text file inside each project. You can install this dependencies using this command.
 
 ```powershell
 pip install -r requirements.txt
 ```
-
-To run it you'll need to have python installed. You can install it in the [official python website](https://www.python.org/).
-
 Once installed, to run **only** the game you must be inside the **Normal_Snake** folder and run this command in any terminal.
 
 ```powershell
