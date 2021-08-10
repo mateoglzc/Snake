@@ -4,7 +4,7 @@ We are all familiar with the classic game "Snake", in which you control a little
 
 This is a version of the game 'Snake' made in python using the Pygame library. With this I'm also working on a deep learning AI model that will hopefully learn to play the game.
 
-## installation
+## Installation
 
 To play the game we first need to download it.
 

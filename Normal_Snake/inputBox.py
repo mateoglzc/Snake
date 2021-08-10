@@ -1,5 +1,4 @@
 import pygame
-# from pygame_gui.elements.ui_text.entry_line import UITextEntryLine
 
 class InputBox():
 
